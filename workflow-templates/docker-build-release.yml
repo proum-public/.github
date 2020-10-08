@@ -1,8 +1,13 @@
 ---
 name: Build and Release Docker Images
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
+    tags:
+      - *
+  schedule:
+    - cron: '0 0 * * *'
 jobs:
   push_to_registry:
     name: Push Docker image to GitHub Packages
