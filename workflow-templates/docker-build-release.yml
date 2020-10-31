@@ -35,7 +35,7 @@ jobs:
       - name: Prepare
         id: prep
         run: |
-          DOCKER_IMAGE=${{ env.dockerhub_repository }}/${{ github.repository }}
+          DOCKER_IMAGE=${{ env.dockerhub_repository }}/${GITHUB_REPOSITORY#*/}
           VERSION=noop
           if [ "${{ github.event_name }}" = "schedule" ]; then
             VERSION=nightly
@@ -104,4 +104,4 @@ jobs:
         with:
           dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
           dockerhub_password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          dockerhub_repository: ${{ env.dockerhub_repository }}/${{ github.repository }}
+          dockerhub_repository: ${{ env.dockerhub_repository }}/${GITHUB_REPOSITORY#*/}
