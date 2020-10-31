@@ -35,7 +35,7 @@ jobs:
       - name: Prepare
         id: prep
         run: |
-          DOCKER_IMAGE=${{ env.dockerhub_repository }}/${{ github.event.repository.name }}
+          DOCKER_IMAGE=${{ env.dockerhub_repository }}/${{ github.repository }}
           VERSION=noop
           if [ "${{ github.event_name }}" = "schedule" ]; then
             VERSION=nightly
@@ -61,12 +61,12 @@ jobs:
 
       - name: Build an image from Dockerfile
         run: |
-          docker build -t docker.pkg.github.com/${{ github.event.repository.name }}/cve:${{ github.sha }} .
+          docker build -t docker.pkg.github.com/${{ github.repository }}/cve:${{ github.sha }} .
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: docker.pkg.github.com/${{ github.event.repository.name }}/cve:${{ github.sha }}
+          image-ref: docker.pkg.github.com/${{ github.repository }}/cve:${{ github.sha }}
           format: 'template'
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results.sarif'
@@ -104,4 +104,4 @@ jobs:
         with:
           dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
           dockerhub_password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          dockerhub_repository: ${{ env.dockerhub_repository }}/${{ github.event.repository.name }}
+          dockerhub_repository: ${{ env.dockerhub_repository }}/${{ github.repository }}
